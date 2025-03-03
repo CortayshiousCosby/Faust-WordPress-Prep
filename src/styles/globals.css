@@ -1,0 +1,169 @@
+/* 
+* Global styles for the entire site
+* These styles apply to all pages and elements, regardless of WordPress content
+*/
+
+:root {
+  /* Color Variables */
+  --color-primary: #3182ce;
+  --color-primary-dark: #2b6cb0;
+  --color-secondary: #4fd1c5;
+  --color-accent: #f6ad55;
+  --color-text: #1a202c;
+  --color-text-light: #718096;
+  --color-background: #ffffff;
+  --color-background-alt: #f7fafc;
+  --color-border: #e2e8f0;
+
+  /* Spacing Variables */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Typography Variables */
+  --font-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+}
+
+/* Reset & Base Styles */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  line-height: 1.6;
+  font-size: 16px;
+  background-color: var(--color-background);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Layout */
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: 75rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+/* Responsive containers */
+@media (max-width: 640px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+/* Common utility classes */
+.section {
+  padding: var(--spacing-2xl) 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Basic typography for non-WP content */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h4 {
+  font-size: 1.5rem;
+}
+h5 {
+  font-size: 1.25rem;
+}
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Buttons for non-WordPress content */
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: var(--color-primary);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: white;
+}
+
+.button-outline {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.button-outline:hover {
+  background-color: rgba(49, 130, 206, 0.1);
+  color: var(--color-primary);
+}
