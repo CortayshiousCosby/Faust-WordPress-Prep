@@ -8094,12 +8094,6 @@ export type GravityformsFormAttributes = {
   inputBorderRadius?: Maybe<Scalars['String']['output']>;
   /** The &quot;inputColor&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
   inputColor?: Maybe<Scalars['String']['output']>;
-  /** The &quot;inputImageChoiceAppearance&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
-  inputImageChoiceAppearance?: Maybe<Scalars['String']['output']>;
-  /** The &quot;inputImageChoiceSize&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
-  inputImageChoiceSize?: Maybe<Scalars['String']['output']>;
-  /** The &quot;inputImageChoiceStyle&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
-  inputImageChoiceStyle?: Maybe<Scalars['String']['output']>;
   /** The &quot;inputPrimaryColor&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
   inputPrimaryColor?: Maybe<Scalars['String']['output']>;
   /** The &quot;inputSize&quot; field on the &quot;GravityformsFormAttributes&quot; block or block attributes */
@@ -8793,12 +8787,6 @@ export type MediaItemMeta = {
 
 /** The size of the media item object. */
 export enum MediaItemSizeEnum {
-  /** MediaItem with the gform-image-choice-lg size */
-  GformImageChoiceLg = 'GFORM_IMAGE_CHOICE_LG',
-  /** MediaItem with the gform-image-choice-md size */
-  GformImageChoiceMd = 'GFORM_IMAGE_CHOICE_MD',
-  /** MediaItem with the gform-image-choice-sm size */
-  GformImageChoiceSm = 'GFORM_IMAGE_CHOICE_SM',
   /** MediaItem with the large size */
   Large = 'LARGE',
   /** MediaItem with the medium size */
