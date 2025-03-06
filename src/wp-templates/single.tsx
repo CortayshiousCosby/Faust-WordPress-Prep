@@ -30,6 +30,7 @@ const Component: FaustTemplate<GetPostQuery> = (props) => {
       />
 
       <main className="container">
+        <h2>Hello</h2>
         <EntryHeader title={title} date={date} author={author.node.name} />
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </main>

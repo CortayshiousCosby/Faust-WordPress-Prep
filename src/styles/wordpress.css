@@ -135,7 +135,9 @@
 
 /* Interactive Columns with Background Colors */
 .wp-block-column {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    border-color 0.3s ease;
   position: relative;
   padding: 1.5rem;
   border-radius: 10px;
@@ -148,19 +150,64 @@
   justify-content: flex-start;
   overflow: hidden;
   border: 1px solid rgba(226, 232, 240, 0.8);
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
 }
 
-/* Apply different background colors to consecutive columns */
+/* Force all children to take full width of their container */
+.wp-block-column > * {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* IMPORTANT: Ensure third column is same width */
+.wp-block-column:nth-child(3) {
+  flex-shrink: 0;
+  width: calc(
+    (100% - 3.5rem) / 3
+  ); /* Calculate exact width for 3 equal columns with 1.75rem gap */
+}
+
+/* Set a base background for all columns to avoid flickering */
+.wp-block-column::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  z-index: -1;
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+/* Background colors and hover effects for each column */
 .wp-block-columns .wp-block-column:nth-of-type(1) {
   background-color: #edf2f7;
+}
+
+.wp-block-columns .wp-block-column:nth-of-type(1)::before {
+  background: linear-gradient(135deg, #fff 0%, #edf2f7 100%);
 }
 
 .wp-block-columns .wp-block-column:nth-of-type(2) {
   background-color: #e6f6ff;
 }
 
+.wp-block-columns .wp-block-column:nth-of-type(2)::before {
+  background: linear-gradient(135deg, #fff 0%, #e6f6ff 100%);
+}
+
 .wp-block-columns .wp-block-column:nth-of-type(3) {
   background-color: #f0fff4;
+}
+
+.wp-block-columns .wp-block-column:nth-of-type(3)::before {
+  background: linear-gradient(135deg, #fff 0%, #f0fff4 100%);
 }
 
 /* Hover state for columns */
@@ -168,40 +215,34 @@
   transform: translateY(-10px) scale(1.02);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
   z-index: 1;
-  background-color: #ffffff;
   border: 1px solid rgba(49, 130, 206, 0.2);
 }
 
-/* Alternate hover effects for each column */
-.wp-block-columns .wp-block-column:nth-of-type(1):hover {
-  background: linear-gradient(135deg, #fff 0%, #edf2f7 100%);
-  border-color: rgba(74, 85, 104, 0.2);
+/* Show gradient on hover */
+.wp-block-column:hover::before {
+  opacity: 1;
 }
 
-.wp-block-columns .wp-block-column:nth-of-type(2):hover {
-  background: linear-gradient(135deg, #fff 0%, #e6f6ff 100%);
-  border-color: rgba(49, 130, 206, 0.2);
-}
-
-.wp-block-columns .wp-block-column:nth-of-type(3):hover {
-  background: linear-gradient(135deg, #fff 0%, #f0fff4 100%);
-  border-color: rgba(72, 187, 120, 0.2);
-}
-
-/* Make sure images look good inside columns */
+/* Make sure images look good inside columns and don't force column wider */
 .wp-block-column img {
   border-radius: 6px;
   max-width: 100%;
+  width: auto;
   height: auto;
   transition: all 0.3s ease;
   transform-origin: center center;
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
 }
 
 .wp-block-column:hover img {
   transform: scale(1.04);
 }
 
-/* Style column headings */
+/* Style column headings - constrain to prevent sizing issues */
 .wp-block-column h1,
 .wp-block-column h2,
 .wp-block-column h3,
@@ -210,6 +251,13 @@
 .wp-block-column h6 {
   color: #1a202c;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .wp-block-column:hover h1,
@@ -237,7 +285,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 .wp-block-column:hover::after {
@@ -275,7 +323,9 @@
 
 /* Additional fixes for consistent column content spacing */
 .wp-block-column > * {
+  width: 100%;
   margin-bottom: 1.5rem;
+  box-sizing: border-box;
 }
 
 /* Specific fix for columns with headings and paragraphs */
@@ -331,14 +381,28 @@
 @media (min-width: 782px) {
   .wp-block-columns {
     flex-wrap: nowrap;
+    align-items: stretch; /* Make all columns equal height */
   }
+
   .wp-block-column {
-    flex-basis: 0;
-    flex-grow: 1;
-    width: auto; /* Auto width on desktop */
+    flex: 1 0 0%; /* Changed from 1 1 0 to 1 0 0% to prevent shrinking */
   }
-  .wp-block-column:not(:first-child) {
-    margin-left: 32px;
+
+  /* Set a specific width for all 3-column layouts, regardless of content */
+  .wp-block-columns > .wp-block-column:first-child:nth-last-child(3),
+  .wp-block-columns
+    > .wp-block-column:first-child:nth-last-child(3)
+    ~ .wp-block-column {
+    width: calc((100% - 3.5rem) / 3);
+    flex: 0 0 calc((100% - 3.5rem) / 3);
+    max-width: calc((100% - 3.5rem) / 3); /* Additional constraint */
+  }
+
+  /* Specific fix for Wellness Programs column issue */
+  .wp-block-columns > .wp-block-column:nth-child(3) {
+    width: calc((100% - 3.5rem) / 3);
+    flex: 0 0 calc((100% - 3.5rem) / 3);
+    max-width: calc((100% - 3.5rem) / 3);
   }
 }
 
@@ -630,6 +694,9 @@
   color: #2d3748;
   font-size: 1rem;
   line-height: 1.6;
+  width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Fix for headings that might have inadequate spacing */
@@ -640,4 +707,21 @@
 .wp-block-column > h5:first-child + p,
 .wp-block-column > h6:first-child + p {
   margin-top: 0.75rem;
+}
+
+/* Fix for common blocks that may cause sizing issues */
+.wp-block-column .wp-block-separator,
+.wp-block-column hr,
+.wp-block-column .wp-block-spacer,
+.wp-block-column .wp-block-group {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Fix for common content blocks */
+.wp-block-column div,
+.wp-block-column figure,
+.wp-block-column section {
+  max-width: 100%;
+  overflow-x: hidden;
 }

@@ -1,43 +1,55 @@
-import styles from "./footer.module.css";
+import React from "react";
 import Link from "next/link";
-import { PrimaryMenuItemFragmentFragment } from "../__generated__/graphql";
 
-interface FooterProps {
-  footerMenuItems?: PrimaryMenuItemFragmentFragment[];
-}
-
-export default function Footer({ footerMenuItems }: FooterProps = {}) {
+const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.footerContent}>
-        <div className={styles.footerNav}>
-          {footerMenuItems && footerMenuItems.length > 0 && (
-            <nav>
-              <ul>
-                {footerMenuItems.map((item) => (
-                  <li key={item.id}>
-                    <Link href={item.uri}>{item.label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-content">
+          <div className="footer-info">
+            <p>© {currentYear} - All rights reserved</p>
+          </div>
+
+          <div className="footer-links">
+            <ul>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service">Terms of Service</Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div className={styles.footerInfo}>
+
+        <div className="footer-credits">
           <p>
-            © {currentYear} • Powered by{" "}
+            Powered by{" "}
             <a
-              href="https://wpengine.com"
+              href="https://wordpress.org"
               target="_blank"
               rel="noopener noreferrer"
             >
-              WP Engine
+              WordPress
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://faustjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Faust.js
             </a>
           </p>
         </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

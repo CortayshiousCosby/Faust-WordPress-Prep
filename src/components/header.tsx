@@ -1,64 +1,105 @@
-import { gql } from "../__generated__";
+import React from "react";
 import Link from "next/link";
-import style from "./header.module.css";
-import {
-  HeaderGeneralSettingsFragmentFragment,
-  PrimaryMenuItemFragmentFragment,
-} from "../__generated__/graphql";
 
-type HeaderProps = {
-  siteTitle: HeaderGeneralSettingsFragmentFragment["title"];
-  siteDescription: HeaderGeneralSettingsFragmentFragment["description"];
-  menuItems: PrimaryMenuItemFragmentFragment[];
+interface MenuItem {
+  id: string;
+  label: string;
+  path: string;
+  parentId: string | null;
+  children?: MenuItem[];
+}
+
+interface HeaderProps {
+  siteTitle: string;
+  siteDescription: string;
+  menuItems: MenuItem[];
+}
+
+// Helper function to organize menu items into a hierarchical structure
+const createMenuHierarchy = (menuItems: MenuItem[]): MenuItem[] => {
+  const itemMap = new Map<string, MenuItem>();
+  const rootItems: MenuItem[] = [];
+
+  // Create a map of all items
+  menuItems.forEach((item) => {
+    itemMap.set(item.id, { ...item, children: [] });
+  });
+
+  // Organize items into hierarchy
+  menuItems.forEach((item) => {
+    const menuItem = itemMap.get(item.id)!;
+
+    if (item.parentId) {
+      const parent = itemMap.get(item.parentId);
+      if (parent) {
+        if (!parent.children) {
+          parent.children = [];
+        }
+        parent.children.push(menuItem);
+      } else {
+        rootItems.push(menuItem);
+      }
+    } else {
+      rootItems.push(menuItem);
+    }
+  });
+
+  return rootItems;
 };
 
-export default function Header({
+// Recursive component for rendering menu items
+const MenuItems: React.FC<{ items: MenuItem[] }> = ({ items }) => {
+  return (
+    <>
+      {items.map((item) => (
+        <li key={item.id}>
+          <Link href={item.path}>{item.label}</Link>
+          {item.children && item.children.length > 0 && (
+            <ul>
+              <MenuItems items={item.children} />
+            </ul>
+          )}
+        </li>
+      ))}
+    </>
+  );
+};
+
+const Header: React.FC<HeaderProps> = ({
   siteTitle,
   siteDescription,
   menuItems,
-}: HeaderProps) {
-  return (
-    <header className={style.header}>
-      <div className="container">
-        <Link href="/" className={style.brand}>
-          <h2 className={style.siteTitle}>{siteTitle}</h2>
-          <p className={style.siteDescription}>{siteDescription}</p>
-        </Link>
+}) => {
+  const hierarchicalMenuItems = createMenuHierarchy(menuItems);
 
-        <nav className={style.nav}>
-          <ul>
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <Link href={item.uri}>{item.label}</Link>
+  return (
+    <header className="site-header">
+      <div className="container">
+        <div className="site-branding">
+          <Link href="/">
+            <h1 className="site-title">{siteTitle}</h1>
+          </Link>
+          {siteDescription && (
+            <p className="site-description">{siteDescription}</p>
+          )}
+        </div>
+
+        <nav className="site-navigation">
+          {menuItems && menuItems.length > 0 ? (
+            <ul className="primary-menu">
+              <MenuItems items={hierarchicalMenuItems} />
+            </ul>
+          ) : (
+            <ul className="primary-menu">
+              <li>
+                <Link href="/">Home</Link>
               </li>
-            ))}
-          </ul>
+            </ul>
+          )}
         </nav>
       </div>
     </header>
   );
-}
-
-Header.fragments = {
-  generalSettingsFragment: gql(`
-    fragment HeaderGeneralSettingsFragment on GeneralSettings {
-      title
-      description
-    }
-  `),
-  menuItemFragment: gql(`
-    fragment PrimaryMenuItemFragment on MenuItem {
-      id
-      uri
-      path
-      label
-      parentId
-      cssClasses
-      menu {
-        node {
-          name
-        }
-      }
-    }
-  `),
 };
+
+export default Header;

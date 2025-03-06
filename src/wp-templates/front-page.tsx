@@ -8,6 +8,7 @@ import WordPressContent from "../components/WordPressContent";
 import { WordPressBlocksViewer } from "@faustwp/blocks";
 import blocks from "../wp-blocks";
 import WordPressBlocksRenderer from "../components/WordPressBlocksRenderer";
+import Footer from "../components/footer";
 
 // Dynamically import the SiteWrapper component
 const SiteWrapper = dynamic(() => import("../components/SiteWrapper"), {
@@ -25,6 +26,36 @@ interface ExtendedQuery extends GetHomePageQuery {
         altText: string;
       };
     };
+  };
+  primaryMenuItems: {
+    nodes: Array<{
+      id: string;
+      uri: string;
+      path: string;
+      label: string;
+      parentId: string;
+      cssClasses: string[];
+      menu: {
+        node: {
+          name: string;
+        };
+      };
+    }>;
+  };
+  footerMenuItems: {
+    nodes: Array<{
+      id: string;
+      uri: string;
+      path: string;
+      label: string;
+      parentId: string;
+      cssClasses: string[];
+      menu: {
+        node: {
+          name: string;
+        };
+      };
+    }>;
   };
 }
 
@@ -79,8 +110,15 @@ const Component: FaustTemplate<ExtendedQuery> = (props) => {
     );
   };
 
+  // Prepare site props
+  const siteProps = {
+    generalSettings: props.data.generalSettings,
+    primaryMenuItems: props.data.primaryMenuItems,
+    footerMenuItems: props.data.footerMenuItems,
+  };
+
   return (
-    <SiteWrapper siteProps={props.data}>
+    <SiteWrapper siteProps={siteProps}>
       <Head>
         <title>{page.title}</title>
       </Head>
@@ -101,6 +139,7 @@ const Component: FaustTemplate<ExtendedQuery> = (props) => {
         <Heading as="h1" size="xl" textAlign="center" mb={6}>
           {page.title}
         </Heading>
+        <h2>Hello</h2>
 
         {/* Render blocks */}
         {renderBlocks()}
@@ -109,7 +148,7 @@ const Component: FaustTemplate<ExtendedQuery> = (props) => {
   );
 };
 
-// Include fragment spreads for all the blocks we want to support
+// Update GraphQL query to include primaryMenuItems if needed
 Component.query = gql`
   query GetHomePage {
     generalSettings {
@@ -156,7 +195,7 @@ Component.query = gql`
         }
       }
     }
-    primaryMenuItems: menuItems(where: { location: PRIMARY }, last: 50) {
+    primaryMenuItems: menuItems(where: { location: PRIMARY }) {
       nodes {
         id
         uri
@@ -164,7 +203,11 @@ Component.query = gql`
         label
         parentId
         cssClasses
-        url
+        menu {
+          node {
+            name
+          }
+        }
       }
     }
     footerMenuItems: menuItems(where: { location: FOOTER }) {

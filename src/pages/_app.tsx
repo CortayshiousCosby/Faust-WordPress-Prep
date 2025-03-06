@@ -3,6 +3,7 @@ import { AppProps } from "next/app";
 import "../../faust.config";
 import "../styles/globals.css";
 import "../styles/wordpress.css";
+import "../styles/app.css";
 import { Provider } from "@/components/ui/provider";
 import Head from "next/head";
 import { WordPressBlocksProvider } from "@faustwp/blocks";

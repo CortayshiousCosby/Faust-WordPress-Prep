@@ -31,15 +31,23 @@
   gap: var(--spacing-md);
 }
 
+.footerNav nav ul li {
+  position: relative;
+}
+
 .footerNav nav ul li a {
   color: var(--color-text);
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  background-color: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .footerNav nav ul li a:hover {
   color: var(--color-primary);
-  text-decoration: underline;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .footerInfo {
@@ -55,10 +63,14 @@
 .footerInfo a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  background-color: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .footerInfo a:hover {
   color: var(--color-primary-dark);
-  text-decoration: underline;
+  background-color: rgba(255, 255, 255, 0.8);
 }
