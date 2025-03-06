@@ -29,7 +29,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <FaustProvider pageProps={pageProps}>
         <WordPressBlocksProvider
           config={{
-            blocks,
+            blocks: blocks,
           }}
         >
           <Provider>

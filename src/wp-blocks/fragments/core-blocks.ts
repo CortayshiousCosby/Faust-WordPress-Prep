@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 
 export const CoreParagraphFragment = gql`
-  fragment CoreParagraphFragment on CoreParagraphBlock {
+  fragment CoreParagraphFragment on CoreParagraph {
     attributes {
-      ... on CoreParagraphBlockAttributes {
+      ... on CoreParagraphAttributes {
         content
         align
         dropCap
@@ -16,10 +16,10 @@ export const CoreParagraphFragment = gql`
   }
 `;
 
-export const CoreHeadingFragment = gql`
-  fragment CoreHeadingFragment on CoreHeadingBlock {
+export const CoreHeadingBlockFragment = gql`
+  fragment CoreHeadingBlockFragment on CoreHeading {
     attributes {
-      ... on CoreHeadingBlockAttributes {
+      ... on CoreHeadingAttributes {
         content
         level
         align
@@ -33,9 +33,9 @@ export const CoreHeadingFragment = gql`
 `;
 
 export const CoreImageBlockFragment = gql`
-  fragment CoreImageBlockFragment on CoreImageBlock {
+  fragment CoreImageBlockFragment on CoreImage {
     attributes {
-      ... on CoreImageBlockAttributes {
+      ... on CoreImageAttributes {
         url
         alt
         caption
@@ -55,9 +55,9 @@ export const CoreImageBlockFragment = gql`
 `;
 
 export const CoreButtonBlockFragment = gql`
-  fragment CoreButtonBlockFragment on CoreButtonBlock {
+  fragment CoreButtonBlockFragment on CoreButton {
     attributes {
-      ... on CoreButtonBlockAttributes {
+      ... on CoreButtonAttributes {
         url
         text
         linkTarget
@@ -72,12 +72,11 @@ export const CoreButtonBlockFragment = gql`
 `;
 
 export const CoreButtonsBlockFragment = gql`
-  fragment CoreButtonsBlockFragment on CoreButtonsBlock {
+  fragment CoreButtonsBlockFragment on CoreButtons {
     attributes {
-      ... on CoreButtonsBlockAttributes {
+      ... on CoreButtonsAttributes {
         align
         layout
-        orientation
         style
       }
     }
@@ -85,9 +84,9 @@ export const CoreButtonsBlockFragment = gql`
 `;
 
 export const CoreColumnsBlockFragment = gql`
-  fragment CoreColumnsBlockFragment on CoreColumnsBlock {
+  fragment CoreColumnsBlockFragment on CoreColumns {
     attributes {
-      ... on CoreColumnsBlockAttributes {
+      ... on CoreColumnsAttributes {
         isStackedOnMobile
         align
         style
@@ -97,9 +96,9 @@ export const CoreColumnsBlockFragment = gql`
 `;
 
 export const CoreColumnBlockFragments = gql`
-  fragment CoreColumnBlockFragments on CoreColumnBlock {
+  fragment CoreColumnBlockFragments on CoreColumn {
     attributes {
-      ... on CoreColumnBlockAttributes {
+      ... on CoreColumnAttributes {
         width
         verticalAlignment
         style
@@ -109,9 +108,9 @@ export const CoreColumnBlockFragments = gql`
 `;
 
 export const CoreGroupBlockFragment = gql`
-  fragment CoreGroupBlockFragment on CoreGroupBlock {
+  fragment CoreGroupBlockFragment on CoreGroup {
     attributes {
-      ... on CoreGroupBlockAttributes {
+      ... on CoreGroupAttributes {
         align
         style
         backgroundColor
@@ -122,9 +121,9 @@ export const CoreGroupBlockFragment = gql`
 `;
 
 export const CoreCoverBlockFragment = gql`
-  fragment CoreCoverBlockFragment on CoreCoverBlock {
+  fragment CoreCoverBlockFragment on CoreCover {
     attributes {
-      ... on CoreCoverBlockAttributes {
+      ... on CoreCoverAttributes {
         url
         id
         hasParallax
@@ -143,9 +142,9 @@ export const CoreCoverBlockFragment = gql`
 `;
 
 export const GravityformsFormFragment = gql`
-  fragment GravityformsFormFragment on GravityformsFormBlock {
+  fragment GravityformsFormFragment on GravityformsForm {
     attributes {
-      ... on GravityformsFormBlockAttributes {
+      ... on GravityformsFormAttributes {
         formId
         title
         description

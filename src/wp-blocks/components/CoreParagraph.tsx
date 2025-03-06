@@ -37,7 +37,8 @@ const CoreParagraph: React.FC<CoreParagraphProps> = ({ block }) => {
     textProps.margin = style.spacing.margin;
   }
 
-  return <Text {...textProps} dangerouslySetInnerHTML={{ __html: content }} />;
+  return <Text>I am paragraph</Text>;
+  // return <Text {...textProps} dangerouslySetInnerHTML={{ __html: content }} />;
 };
 
 export default CoreParagraph;

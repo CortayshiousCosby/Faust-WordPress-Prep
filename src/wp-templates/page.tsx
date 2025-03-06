@@ -14,7 +14,7 @@ import {
   CoreParagraphFragment,
   CoreHeadingBlockFragment,
   GravityformsFormFragment,
-} from "../wp-blocks/fragments";
+} from "../wp-blocks/fragments/core-blocks";
 
 // Dynamically import the SiteWrapper component
 const SiteWrapper = dynamic(() => import("../components/SiteWrapper"), {
@@ -73,14 +73,7 @@ const Component: FaustTemplate<GetPageQuery> = (props) => {
       : undefined,
   };
 
-  return (
-    <SiteWrapper siteProps={siteProps}>
-      <article className="prose lg:prose-xl mx-auto">
-        {title && <h1>{title}</h1>}
-        {blockContent}
-      </article>
-    </SiteWrapper>
-  );
+  return <>Hello world</>;
 };
 
 Component.variables = ({ databaseId }, ctx) => {

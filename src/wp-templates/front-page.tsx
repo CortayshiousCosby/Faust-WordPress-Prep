@@ -1,65 +1,25 @@
 import { gql } from "@apollo/client";
-import Head from "next/head";
-import { GetHomePageQuery } from "../__generated__/graphql";
+import { Container } from "@chakra-ui/react";
 import { FaustTemplate, flatListToHierarchical } from "@faustwp/core";
-import { Container, Box, Heading, Image } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import WordPressContent from "../components/WordPressContent";
+import { GetHomePageQuery } from "../__generated__/graphql";
+import {
+  CoreButtonBlockFragment,
+  CoreButtonsBlockFragment,
+  CoreColumnBlockFragments,
+  CoreColumnsBlockFragment,
+  CoreGroupBlockFragment,
+  CoreImageBlockFragment,
+  CoreParagraphFragment,
+  CoreHeadingBlockFragment,
+} from "../wp-blocks/fragments/core-blocks";
 import { WordPressBlocksViewer } from "@faustwp/blocks";
-import blocks from "../wp-blocks";
-import WordPressBlocksRenderer from "../components/WordPressBlocksRenderer";
-import Footer from "../components/footer";
-
 // Dynamically import the SiteWrapper component
 const SiteWrapper = dynamic(() => import("../components/SiteWrapper"), {
   ssr: false, // Set to false if the component should not be server-side rendered
 });
 
-interface ExtendedQuery extends GetHomePageQuery {
-  page?: {
-    title: string;
-    content: string;
-    editorBlocks?: any[];
-    featuredImage?: {
-      node: {
-        sourceUrl: string;
-        altText: string;
-      };
-    };
-  };
-  primaryMenuItems: {
-    nodes: Array<{
-      id: string;
-      uri: string;
-      path: string;
-      label: string;
-      parentId: string;
-      cssClasses: string[];
-      menu: {
-        node: {
-          name: string;
-        };
-      };
-    }>;
-  };
-  footerMenuItems: {
-    nodes: Array<{
-      id: string;
-      uri: string;
-      path: string;
-      label: string;
-      parentId: string;
-      cssClasses: string[];
-      menu: {
-        node: {
-          name: string;
-        };
-      };
-    }>;
-  };
-}
-
-const Component: FaustTemplate<ExtendedQuery> = (props) => {
+const Component: FaustTemplate<GetHomePageQuery> = (props) => {
   if (props.loading) {
     return <>Loading page data...</>;
   }
@@ -69,46 +29,12 @@ const Component: FaustTemplate<ExtendedQuery> = (props) => {
     return <>Error: Data is missing</>;
   }
 
-  const { page } = props.data;
+  const { editorBlocks } = props.data.page;
+  const hierarchicalBlocks = flatListToHierarchical(editorBlocks, {
+    childrenKey: "innerBlocks",
+  });
 
-  if (!page) {
-    return (
-      <Container maxW="container.xl" py={10}>
-        <Box textAlign="center">
-          Home Page Not Found. Please create a page with the slug "home" in
-          WordPress.
-        </Box>
-      </Container>
-    );
-  }
-
-  // Convert flat list of blocks to hierarchical structure
-  const blockList = page.editorBlocks
-    ? flatListToHierarchical(page.editorBlocks, {
-        childrenKey: "innerBlocks",
-      })
-    : null;
-
-  // For debugging - log block structure to help identify issues
-  if (blockList) {
-    console.log("Block structure:", JSON.stringify(blockList, null, 2));
-  }
-
-  // Function to render blocks with error handling
-  const renderBlocks = () => {
-    if (!blockList) {
-      return page.content && <WordPressContent content={page.content} />;
-    }
-
-    // Use direct content as a fallback - this ensures columns and other content appears
-    return (
-      <>
-        <Box className="wp-blocks-content">
-          <WordPressContent content={page.content || ""} />
-        </Box>
-      </>
-    );
-  };
+  console.log("Hierachy Blocks", hierarchicalBlocks);
 
   // Prepare site props
   const siteProps = {
@@ -119,37 +45,21 @@ const Component: FaustTemplate<ExtendedQuery> = (props) => {
 
   return (
     <SiteWrapper siteProps={siteProps}>
-      <Head>
-        <title>{page.title}</title>
-      </Head>
-      <Container maxW="container.xl" py={10}>
-        {/* Featured Image */}
-        {page.featuredImage?.node && (
-          <Box mb={6}>
-            <Image
-              src={page.featuredImage.node.sourceUrl}
-              alt={page.featuredImage.node.altText || page.title}
-              borderRadius="lg"
-              width="100%"
-            />
-          </Box>
-        )}
-
-        {/* Page Title */}
-        <Heading as="h1" size="xl" textAlign="center" mb={6}>
-          {page.title}
-        </Heading>
-        <h2>Hello</h2>
-
-        {/* Render blocks */}
-        {renderBlocks()}
-      </Container>
+      <WordPressBlocksViewer blocks={hierarchicalBlocks} />˘
     </SiteWrapper>
   );
 };
 
 // Update GraphQL query to include primaryMenuItems if needed
 Component.query = gql`
+  ${CoreParagraphFragment}
+  ${CoreHeadingBlockFragment}
+  ${CoreGroupBlockFragment}
+  ${CoreColumnsBlockFragment}
+  ${CoreColumnBlockFragments}
+  ${CoreImageBlockFragment}
+  ${CoreButtonsBlockFragment}
+  ${CoreButtonBlockFragment}
   query GetHomePage {
     generalSettings {
       title
@@ -157,37 +67,22 @@ Component.query = gql`
     }
     page(id: "home", idType: URI) {
       title
-      content
-      editorBlocks {
+      editorBlocks(flat: true) {
         name
         __typename
         renderedHtml
         id: clientId
         parentId: parentClientId
-        # Include any available fields that might help with rendering
-        innerBlocks {
-          name
-          __typename
-          renderedHtml
-          id: clientId
-          parentId: parentClientId
-          innerBlocks {
-            name
-            __typename
-            renderedHtml
-            id: clientId
-            parentId: parentClientId
-            # Add another level of nesting to capture deep structures like columns
-            innerBlocks {
-              name
-              __typename
-              renderedHtml
-              id: clientId
-              parentId: parentClientId
-            }
-          }
-        }
+        ...CoreParagraphFragment
+        ...CoreHeadingBlockFragment
+        ...CoreGroupBlockFragment
+        ...CoreColumnsBlockFragment
+        ...CoreColumnBlockFragments
+        ...CoreImageBlockFragment
+        ...CoreButtonsBlockFragment
+        ...CoreButtonBlockFragment
       }
+
       featuredImage {
         node {
           sourceUrl
