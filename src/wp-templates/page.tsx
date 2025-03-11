@@ -75,14 +75,7 @@ const Component: FaustTemplate<GetPageQuery> = (props) => {
       : undefined,
   };
 
-  return (
-    <SiteWrapper siteProps={siteProps}>
-      <article className="prose lg:prose-xl mx-auto">
-        {title && <h1>{title}</h1>}
-        {blockContent}
-      </article>
-    </SiteWrapper>
-  );
+  return <SiteWrapper siteProps={siteProps}>{blockContent}</SiteWrapper>;
 };
 
 Component.variables = ({ databaseId }, ctx) => {
