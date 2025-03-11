@@ -1,9 +1,10 @@
-import { gql } from "../__generated__";
+import { gql } from "@apollo/client";
 import { FaustTemplate, flatListToHierarchical } from "@faustwp/core";
 import dynamic from "next/dynamic";
 import { GetPageQuery } from "../__generated__/graphql";
 import { WordPressBlocksViewer } from "@faustwp/blocks";
 import blocks from "../wp-blocks";
+// Import fragments but don't include in gql directly
 import {
   CoreButtonBlockFragment,
   CoreButtonsBlockFragment,
@@ -13,6 +14,7 @@ import {
   CoreImageBlockFragment,
   CoreParagraphFragment,
   CoreHeadingBlockFragment,
+  CoreCoverBlockFragment,
   GravityformsFormFragment,
 } from "../wp-blocks/fragments/core-blocks";
 
@@ -73,7 +75,14 @@ const Component: FaustTemplate<GetPageQuery> = (props) => {
       : undefined,
   };
 
-  return <>Hello world</>;
+  return (
+    <SiteWrapper siteProps={siteProps}>
+      <article className="prose lg:prose-xl mx-auto">
+        {title && <h1>{title}</h1>}
+        {blockContent}
+      </article>
+    </SiteWrapper>
+  );
 };
 
 Component.variables = ({ databaseId }, ctx) => {
@@ -83,18 +92,8 @@ Component.variables = ({ databaseId }, ctx) => {
   };
 };
 
-// @ts-ignore - Ignoring TypeScript error related to gql return type
-Component.query = gql(`
-  ${CoreParagraphFragment}
-  ${CoreHeadingBlockFragment}
-  ${CoreGroupBlockFragment}
-  ${CoreColumnsBlockFragment}
-  ${CoreColumnBlockFragments}
-  ${CoreImageBlockFragment}
-  ${CoreButtonsBlockFragment}
-  ${CoreButtonBlockFragment}
-  ${GravityformsFormFragment}
-
+// Use string template instead of gql tag for the fragments to avoid duplicates
+Component.query = gql`
   query GetPage($databaseId: ID!, $asPreview: Boolean = false) {
     page(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
       title
@@ -105,15 +104,6 @@ Component.query = gql(`
         renderedHtml
         id: clientId
         parentId: parentClientId
-        ...CoreParagraphFragment
-        ...CoreHeadingBlockFragment
-        ...CoreGroupBlockFragment
-        ...CoreColumnsBlockFragment
-        ...CoreColumnBlockFragments
-        ...CoreImageBlockFragment
-        ...CoreButtonsBlockFragment
-        ...CoreButtonBlockFragment
-        ${GravityformsFormFragment}
         innerBlocks {
           name
           __typename
@@ -136,6 +126,6 @@ Component.query = gql(`
       }
     }
   }
-`);
+`;
 
 export default Component;
