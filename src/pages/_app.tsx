@@ -4,11 +4,13 @@ import "../../faust.config";
 import "../styles/globals.css";
 import "../styles/wordpress.css";
 import "../styles/app.css";
+import "../../globalStylesheet.css";
 import { Provider } from "@/components/ui/provider";
 import Head from "next/head";
-import { WordPressBlocksProvider } from "@faustwp/blocks";
-import blocks from "../wp-blocks";
+import { fromThemeJson, WordPressBlocksProvider } from "@faustwp/blocks";
 import { useRouter } from "next/router";
+import wpBlocks from "@/wp-blocks";
+import themeJson from "../../theme.json";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -29,7 +31,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <FaustProvider pageProps={pageProps}>
         <WordPressBlocksProvider
           config={{
-            blocks: blocks,
+            blocks: wpBlocks,
+            theme: fromThemeJson(themeJson),
           }}
         >
           <Provider>

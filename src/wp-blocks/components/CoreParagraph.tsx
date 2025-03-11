@@ -1,5 +1,7 @@
 import React from "react";
-import { Text, TextProps } from "@chakra-ui/react";
+import { Box, Text, TextProps } from "@chakra-ui/react";
+import { getStyles, useBlocksTheme, WordPressBlock } from "@faustwp/blocks";
+import { CoreParagraphFragmentFragment } from "@/__generated__/graphql";
 
 interface CoreParagraphProps {
   block: {
@@ -15,30 +17,21 @@ interface CoreParagraphProps {
   };
 }
 
-const CoreParagraph: React.FC<CoreParagraphProps> = ({ block }) => {
-  const { content, align, fontSize, backgroundColor, textColor, style } =
-    block.attributes;
+const CoreParagraph: WordPressBlock<CoreParagraphFragmentFragment> = (
+  props
+) => {
+  // console.log('Paragraph Props', props);
+  const theme = useBlocksTheme();
+  const style = getStyles(theme, { ...props });
+  const { attributes } = props;
 
-  if (!content) return null;
-
-  const textProps: TextProps = {
-    textAlign: align as any,
-    fontSize: fontSize || "md",
-    bg: backgroundColor,
-    color: textColor,
-  };
-
-  // Apply custom styles if available
-  if (style?.typography?.fontSize) {
-    textProps.fontSize = style.typography.fontSize;
-  }
-
-  if (style?.spacing?.margin) {
-    textProps.margin = style.spacing.margin;
-  }
-
-  return <Text>I am paragraph</Text>;
-  // return <Text {...textProps} dangerouslySetInnerHTML={{ __html: content }} />;
+  return (
+    <Box
+      as={"p"}
+      style={style}
+      dangerouslySetInnerHTML={{ __html: attributes?.content ?? "" }}
+    />
+  );
 };
 
 export default CoreParagraph;

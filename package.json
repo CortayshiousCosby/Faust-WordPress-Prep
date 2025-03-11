@@ -38,6 +38,8 @@
     "@types/node": "^18.16.1",
     "@types/react": "^18.3.3",
     "concurrently": "^8.2.2",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "typescript": "^5.4.5"
   }
 }
