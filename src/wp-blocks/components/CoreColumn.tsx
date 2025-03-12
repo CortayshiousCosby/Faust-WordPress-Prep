@@ -23,7 +23,7 @@ export default function CoreColumn({
   block,
 }: CoreColumnProps) {
   const { className, width, style, verticalAlignment, url } = attributes;
-
+  console.log("CoreColumn", attributes);
   // Determine vertical alignment
   let alignItems = "center"; // Default center alignment for content
   let justifyContent = "flex-start";

@@ -25,7 +25,7 @@ const Component: FaustTemplate<GetHomePageQuery> = (props) => {
   }
 
   if (!props.data) {
-    console.error("props.data is undefined");
+    // console.error("props.data is undefined");
     return <>Error: Data is missing</>;
   }
 
@@ -34,7 +34,7 @@ const Component: FaustTemplate<GetHomePageQuery> = (props) => {
     childrenKey: "innerBlocks",
   });
 
-  console.log("Hierachy Blocks", hierarchicalBlocks);
+  //   console.log("Hierachy Blocks", hierarchicalBlocks);
 
   // Prepare site props
   const siteProps = {
@@ -45,7 +45,7 @@ const Component: FaustTemplate<GetHomePageQuery> = (props) => {
 
   return (
     <SiteWrapper siteProps={siteProps}>
-      <WordPressBlocksViewer blocks={hierarchicalBlocks} />˘
+      <WordPressBlocksViewer blocks={hierarchicalBlocks} />
     </SiteWrapper>
   );
 };
